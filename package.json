@@ -1,0 +1,26 @@
+{
+  "name": "f1-schedule-discord-bot",
+  "version": "1.0.0",
+  "description": "Send the schedule of the F1 race week",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jyben/f1-schedule-discord-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jyben/f1-schedule-discord-bot/issues"
+  },
+  "homepage": "https://github.com/Jyben/f1-schedule-discord-bot#readme",
+  "dependencies": {
+    "@discordjs/rest": "^0.4.1",
+    "axios": "^0.27.2",
+    "date-and-time": "^2.3.1",
+    "discord.js": "^13.7.0"
+  }
+}
