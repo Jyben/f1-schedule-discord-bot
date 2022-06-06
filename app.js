@@ -41,7 +41,7 @@ client.on('interactionCreate', async interaction => {
             response[0].Circuit.Location.country,
             date.transform(response[0].FirstPractice.date, 'YYYY-MM-DD', 'DD/MM',) + ' - ' + response[0].FirstPractice.time.slice(0, -4),
             date.transform(response[0].SecondPractice.date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].SecondPractice.time.slice(0, -4),
-            date.transform(response[0].ThirdPractice.date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].ThirdPractice.time.slice(0, -4),
+            response[0].ThirdPractice === undefined ? "Pas de FP3" : date.transform(response[0].ThirdPractice.date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].ThirdPractice.time.slice(0, -4),
             date.transform(response[0].Qualifying.date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].Qualifying.time.slice(0, -4),
             response[0].Sprint === undefined ? "Pas de sprint" : date.transform(response[0].Sprint.date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].Sprint.time.slice(0, -4),
             date.transform(response[0].date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].time.slice(0, -4));
