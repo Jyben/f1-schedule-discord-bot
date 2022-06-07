@@ -6,24 +6,23 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const axios = require('axios').default;
 const date = require('date-and-time');
-const fr = require('date-and-time/locale/fr');
 
 const token = Config.settings.auth.discordToken;
 const clientId = Config.settings.auth.clientId;
 const guildId = Config.settings.auth.guildId;
-
+const calendar = new MessageAttachment('./assets/calendar.png');
+const f1 = new MessageAttachment('./assets/f1.png');
+const jyben = new MessageAttachment('./assets/jyben.png');
 const commands = [
     new SlashCommandBuilder().setName('calendrier').setDescription('Donne le calendrier F1 de la semaine'),
 ]
     .map(command => command.toJSON());
-
 const rest = new REST({ version: '9' }).setToken(token);
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
 rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);
-
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
 client.once('ready', () => {
     console.log('Discord bot ready!');
@@ -35,7 +34,6 @@ client.on('interactionCreate', async interaction => {
     const { commandName } = interaction;
 
     if (commandName === 'calendrier') {
-        date.locale(fr);
         const response = await getScheduleAsync();
         const embed = getEmbed(response[0].Circuit.Location.locality,
             response[0].Circuit.Location.country,
@@ -46,12 +44,9 @@ client.on('interactionCreate', async interaction => {
             response[0].Sprint === undefined ? "Pas de sprint" : date.transform(response[0].Sprint.date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].Sprint.time.slice(0, -4),
             date.transform(response[0].date, 'YYYY-MM-DD', 'DD/MM') + ' - ' + response[0].time.slice(0, -4));
 
-        await interaction.reply({ embeds: [embed], files: [calendar, f1] });
+        await interaction.reply({ embeds: [embed], files: [calendar, f1, jyben] });
     }
 });
-
-const calendar = new MessageAttachment('./assets/calendar.png');
-const f1 = new MessageAttachment('./assets/f1.png');
 
 function getEmbed(locality, country, fp1, fp2, fp3, quali, sprint, race) {
     return new MessageEmbed()
@@ -71,9 +66,8 @@ function getEmbed(locality, country, fp1, fp2, fp3, quali, sprint, race) {
             { name: 'Timezone', value: 'UTC' },
         )
         .setTimestamp()
-        .setFooter({ text: 'Built by Jyben', iconURL: 'https://www.gravatar.com/avatar/06cabe00b60eefa20db5f265960b86d5' })
+        .setFooter({ text: 'Built by Jyben (https://github.com/Jyben)', iconURL: 'attachment://jyben.png' })
 }
-
 
 async function getScheduleAsync() {
     const response = await axios.get('http://ergast.com/api/f1/current.json');
